@@ -1,0 +1,574 @@
+/* Global CSS Styles for finWise Financial Literacy Platform */
+/* This file provides consistent styling across all pages with proper Font Awesome integration */
+
+/* Color Scheme Variables for Easy Maintenance */
+:root {
+    --primary-blue: #3e688c;
+    --success-green: #03a63c;
+    --secondary-green: #5ba66e;  
+    --accent-teal: #69bfbf;
+    --white: #ffffff;
+    --light-gray: #f8f9fa;
+    --medium-gray: #e0e0e0;
+    --dark-gray: #666666;
+    --text-dark: #333333;
+    --error-red: #dc3545;
+}
+
+/* Base Styles - Consistent across all pages */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    color: var(--text-dark);
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-teal) 100%);
+    min-height: 100vh;
+}
+
+/* Typography Styles */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+/* Container and Layout */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header and Navigation Styles */
+.header, .quiz-header {
+    text-align: center;
+    color: var(--white);
+    margin-bottom: 2rem;
+    padding: 2rem 0;
+}
+
+.header h1, .quiz-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.header p, .quiz-header p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Logo Styling with Font Awesome Integration */
+.logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--white);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.logo i {
+    color: var(--success-green);
+}
+
+/* Navigation Styles */
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+.nav-links a {
+    color: var(--white);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: var(--success-green);
+}
+
+/* Button Styles with Font Awesome Icons */
+.btn {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.btn-primary {
+    background: var(--success-green);
+    color: var(--white);
+    box-shadow: 0 4px 15px rgba(3, 166, 60, 0.4);
+}
+
+.btn-primary:hover {
+    background: var(--secondary-green);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(3, 166, 60, 0.6);
+}
+
+.btn-secondary {
+    background: var(--accent-teal);
+    color: var(--white);
+}
+
+.btn-secondary:hover {
+    background: var(--primary-blue);
+}
+
+.btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Card and Container Styles */
+.card, .quiz-container, .glossary-container, .search-container {
+    background: var(--white);
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+/* Feature Cards with Font Awesome Icons */
+.feature-card {
+    text-align: center;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+    background: var(--white);
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.feature-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: var(--white);
+}
+
+.feature-card:nth-child(1) .feature-icon { background: var(--primary-blue); }
+.feature-card:nth-child(2) .feature-icon { background: var(--success-green); }
+.feature-card:nth-child(3) .feature-icon { background: var(--secondary-green); }
+.feature-card:nth-child(4) .feature-icon { background: var(--accent-teal); }
+
+.feature-card h3 {
+    color: var(--primary-blue);
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+/* Progress Bar Styles */
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--medium-gray);
+    border-radius: 4px;
+    margin-bottom: 2rem;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--success-green), var(--secondary-green));
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+/* Quiz and Question Styles */
+.question-text {
+    font-size: 1.3rem;
+    color: var(--text-dark);
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.options {
+    display: grid;
+    gap: 1rem;
+}
+
+.option {
+    padding: 1rem 1.5rem;
+    border: 2px solid var(--medium-gray);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: var(--white);
+    font-size: 1.1rem;
+    position: relative;
+}
+
+.option:hover {
+    border-color: var(--accent-teal);
+    background: var(--light-gray);
+}
+
+.option.selected {
+    border-color: var(--primary-blue);
+    background: #e8f2f7;
+}
+
+.option.correct {
+    border-color: var(--success-green);
+    background: #e8f5e8;
+    color: var(--success-green);
+}
+
+.option.incorrect {
+    border-color: var(--error-red);
+    background: #f8d7da;
+    color: var(--error-red);
+}
+
+.option.disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Filter and Level Selection Styles */
+.filter-btn, .level-btn {
+    padding: 8px 20px;
+    border: 2px solid var(--primary-blue);
+    background: var(--white);
+    color: var(--primary-blue);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.filter-btn:hover,
+.filter-btn.active,
+.level-btn:hover,
+.level-btn.active {
+    background: var(--primary-blue);
+    color: var(--white);
+}
+
+/* Search Input Styles */
+.search-input {
+    width: 100%;
+    padding: 15px 50px 15px 20px;
+    font-size: 1.1rem;
+    border: 2px solid var(--medium-gray);
+    border-radius: 25px;
+    outline: none;
+    transition: border-color 0.3s ease;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.search-input:focus {
+    border-color: var(--primary-blue);
+}
+
+.search-icon {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--dark-gray);
+}
+
+/* Glossary Term Styles */
+.term-card {
+    padding: 1.5rem;
+    border: 1px solid var(--medium-gray);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.term-card:hover {
+    border-color: var(--accent-teal);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.term-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--primary-blue);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.term-definition {
+    color: var(--dark-gray);
+    line-height: 1.6;
+}
+
+.term-level {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-top: 1rem;
+}
+
+.level-novice {
+    background: #e8f5e8;
+    color: var(--success-green);
+}
+
+.level-intermediate {
+    background: #e8f2f7;
+    color: var(--primary-blue);
+}
+
+.level-advanced {
+    background: #f0f8f8;
+    color: var(--accent-teal);
+}
+
+/* Feedback Styles */
+.question-feedback {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    display: none;
+}
+
+.question-feedback.show {
+    display: block;
+}
+
+.feedback-correct {
+    background: #e8f5e8;
+    color: var(--success-green);
+    border-left: 4px solid var(--success-green);
+}
+
+.feedback-incorrect {
+    background: #f8d7da;
+    color: var(--error-red);
+    border-left: 4px solid var(--error-red);
+}
+
+/* Results and Statistics Styles */
+.results-card {
+    background: linear-gradient(135deg, var(--success-green), var(--secondary-green));
+    color: var(--white);
+    padding: 3rem 2rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.final-score {
+    font-size: 4rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.score-message {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    text-align: center;
+}
+
+.stat-item h4 {
+    color: var(--primary-blue);
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Footer Styles */
+.footer {
+    background: var(--primary-blue);
+    color: var(--white);
+    text-align: center;
+    padding: 2rem 0;
+    margin-top: 2rem;
+}
+
+/* Back Navigation Styles */
+.back-home {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.back-home a {
+    color: var(--white);
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.back-home a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Design - Mobile First Approach */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    .header h1, .quiz-header h1 {
+        font-size: 2rem;
+    }
+    
+    .nav-links {
+        display: none;
+    }
+    
+    .card, .quiz-container, .glossary-container, .search-container {
+        padding: 1.5rem;
+    }
+    
+    .question-text {
+        font-size: 1.2rem;
+    }
+    
+    .option {
+        padding: 0.8rem 1rem;
+        font-size: 1rem;
+    }
+    
+    .btn {
+        padding: 10px 20px;
+        font-size: 1rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .filter-buttons, .level-buttons {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 480px) {
+    .header h1, .quiz-header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .final-score {
+        font-size: 3rem;
+    }
+    
+    .score-message {
+        font-size: 1.2rem;
+    }
+}
+
+/* Animation and Transition Classes */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.slide-up {
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Accessibility Improvements */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Focus styles for better accessibility */
+.btn:focus,
+.option:focus,
+.search-input:focus,
+.filter-btn:focus,
+.level-btn:focus {
+    outline: 2px solid var(--success-green);
+    outline-offset: 2px;
+}
+
+/* Print styles for educational materials */
+@media print {
+    body {
+        background: white;
+        color: black;
+    }
+    
+    .header, .quiz-header {
+        background: none;
+        color: black;
+    }
+    
+    .btn, .navigation {
+        display: none;
+    }
+}
