@@ -1,3 +1,3 @@
 # finWise
 
-It is a web tool that gamifies financial literacy with a focus on Canada.
+Web tool that gamifies financial literacy with Canadian spin.
