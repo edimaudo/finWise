@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Literacy Glossary - finWise</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #3e688c 0%, #69bfbf 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 2rem;
+            padding: 2rem 0;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-container {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            font-size: 1.1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: #3e688c;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            padding: 8px 20px;
+            border: 2px solid #3e688c;
+            background: white;
+            color: #3e688c;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #3e688c;
+            color: white;
+        }
+
+        .glossary-container {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .glossary-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .term-card {
+            padding: 1.5rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .term-card:hover {
+            border-color: #69bfbf;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .term-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #3e688c;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .term-definition {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .term-level {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-top: 1rem;
+        }
+
+        .level-novice {
+            background: #e8f5e8;
+            color: #03a63c;
+        }
+
+        .level-intermediate {
+            background: #e8f2f7;
+            color: #3e688c;
+        }
+
+        .level-advanced {
+            background: #f0f8f8;
+            color: #69bfbf;
+        }
+
+        .no-results {
+            text-align: center;
+            color: #666;
+            font-size: 1.2rem;
+            padding: 3rem 0;
+        }
+
+        .back-home {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .back-home a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-home a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .search-container,
+            .glossary-container {
+                padding: 1.5rem;
+            }
+            
+            .filter-buttons {
+                justify-content: flex-start;
+            }
+            
+            .term-card {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-book"></i> Financial Literacy Glossary</h1>
+            <p>Master essential financial terms and concepts tailored for Canadian investors, savers, and financial decision-makers. Build your financial vocabulary to make informed economic choices.</p>
+        </div>
+
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search for financial terms..." oninput="filterTerms()">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+            
+            <div class="filter-buttons">
+                <button class="filter-btn active" onclick="filterByLevel('all')">All Terms</button>
+                <button class="filter-btn" onclick="filterByLevel('novice')">Novice</button>
+                <button class="filter-btn" onclick="filterByLevel('intermediate')">Intermediate</button>
+                <button class="filter-btn" onclick="filterByLevel('advanced')">Advanced</button>
+            </div>
+        </div>
+
+        <div class="glossary-container">
+            <div class="glossary-grid" id="glossaryGrid">
+                <!-- Terms will be populated by JavaScript -->
+            </div>
+            <div class="no-results" id="noResults" style="display: none;">
+                <i class="fas fa-search"></i>
+                <p>No terms found matching your search. Try different keywords or browse by level.</p>
+            </div>
+        </div>
+
+        <div class="back-home">
+            <a href="index.html"><i class="fas fa-arrow-left"></i> Back to Home</a>
+        </div>
+    </div>
+
+    <script>
+        // Comprehensive financial literacy glossary tailored for Canadian context
+        const financialTerms = [
+            // Novice Level Terms - Foundation concepts every Canadian should know
+            {
+                term: "TFSA (Tax-Free Savings Account)",
+                definition: "A Canadian registered account where you can save or invest money without paying tax on any gains, interest, or dividends earned. Contribution room accumulates each year, and withdrawals can be re-contributed in future years.",
+                level: "novice",
+                category: "savings"
+            },
+            {
+                term: "RRSP (Registered Retirement Savings Plan)",
+                definition: "A Canadian retirement savings account that allows you to contribute pre-tax dollars, reducing your current taxable income. Investments grow tax-deferred until withdrawal, typically in retirement when you may be in a lower tax bracket.",
+                level: "novice",
+                category: "retirement"
+            },
+            {
+                term: "Compound Interest",
+                definition: "Interest calculated on both the principal amount and previously earned interest. This creates exponential growth over time, making it one of the most powerful wealth-building concepts for long-term financial success.",
+                level: "novice",
+                category: "investing"
+            },
+            {
+                term: "Credit Score",
+                definition: "A numerical representation (300-900 in Canada) of your creditworthiness based on your credit history. Higher scores typically result in better interest rates and loan terms from Canadian financial institutions.",
+                level: "novice",
+                category: "credit"
+            },
+            {
+                term: "Emergency Fund",
+                definition: "Money set aside to cover unexpected expenses or financial emergencies, typically 3-6 months of living expenses. This fund should be easily accessible and separate from your regular savings goals.",
+                level: "novice",
+                category: "savings"
+            },
+            {
+                term: "Budget",
+                definition: "A plan that outlines your expected income and expenses over a specific period. A good budget helps you track spending, save money, and work toward financial goals while ensuring you live within your means.",
+                level: "novice",
+                category: "planning"
+            },
+            {
+                term: "Net Worth",
+                definition: "The total value of your assets (what you own) minus your liabilities (what you owe). This number provides a snapshot of your overall financial health and progress toward wealth building.",
+                level: "novice",
+                category: "planning"
+            },
+            {
+                term: "Inflation",
+                definition: "The rate at which the general level of prices for goods and services rises, reducing purchasing power over time. Currently tracked by Statistics Canada, understanding inflation helps you make better long-term financial decisions.",
+                level: "novice",
+                category: "economics"
+            },
+            {
+                term: "GIC (Guaranteed Investment Certificate)",
+                definition: "A low-risk Canadian investment that guarantees your principal and pays a fixed interest rate over a predetermined period. GICs are insured by CDIC up to $100,000 per eligible deposit category.",
+                level: "novice",
+                category: "investing"
+            },
+            {
+                term: "Debt-to-Income Ratio",
+                definition: "The percentage of your gross monthly income that goes toward paying debts. Canadian lenders typically prefer this ratio to be below 36-40% when qualifying you for mortgages or other major loans.",
+                level: "novice",
+                category: "credit"
+            },
+
+            // Intermediate Level Terms - For those building on basic knowledge
+            {
+                term: "Diversification",
+                definition: "An investment strategy that spreads risk by allocating investments across various asset classes, sectors, and geographic regions. This approach helps reduce the impact of poor performance in any single investment.",
+                level: "intermediate",
+                category: "investing"
+            },
+            {
+                term: "Asset Allocation",
+                definition: "The strategy of dividing investment portfolios among different asset categories such as stocks, bonds, and cash. The allocation should reflect your risk tolerance, investment timeline, and financial goals.",
+                level: "intermediate",
+                category: "investing"
+            },
+            {
+                term: "Capital Gains Tax",
+                definition: "Tax paid on the profit from selling investments or assets in Canada. Currently, 50% of capital gains are taxable at your marginal tax rate, making tax-efficient investing strategies important for wealth building.",
+                level: "intermediate",
+                category: "taxation"
+            },
+            {
+                term: "Mortgage Stress Test",
+                definition: "A financial assessment required by Canadian regulators where borrowers must qualify at either the Bank of Canada's 5-year benchmark rate or their contract rate plus 2%, whichever is higher.",
+                level: "intermediate",
+                category: "real_estate"
+            },
+            {
+                term: "Dollar-Cost Averaging",
+                definition: "An investment strategy where you invest a fixed amount regularly regardless of market conditions. This approach can help reduce the impact of market volatility and eliminate the need to time the market.",
+                level: "intermediate",
+                category: "investing"
+            },
+            {
+                term: "Mutual Fund",
+                definition: "A pooled investment vehicle that collects money from many investors to purchase a diversified portfolio of stocks, bonds, or other securities. Professional fund managers make investment decisions on behalf of shareholders.",
+                level: "intermediate",
+                category: "investing"
+            },
+            {
+                term: "ETF (Exchange-Traded Fund)",
+                definition: "A type of investment fund that trades on stock exchanges like individual stocks. ETFs typically track an index, commodity, bonds, or basket of assets and often have lower fees than mutual funds.",
+                level: "intermediate",
+                category: "investing"
+            },
+            {
+                term: "RESP (Registered Education Savings Plan)",
+                definition: "A Canadian account designed to help save for a child's post-secondary education. The government provides grants and bonds, and investment growth is tax-deferred until withdrawal for educational purposes.",
+                level: "intermediate",
+                category: "education"
+            },
+            {
+                term: "Amortization",
+                definition: "The process of paying off debt through regular payments over time. In Canadian mortgages, this typically refers to the total time needed to pay off the entire mortgage, commonly 25-30 years.",
+                level: "intermediate",
+                category: "real_estate"
+            },
+            {
+                term: "Yield",
+                definition: "The annual return on an investment expressed as a percentage. For bonds, it's the annual interest payment divided by the current price. For stocks, it often refers to the dividend yield.",
+                level: "intermediate",
+                category: "investing"
+            },
+
+            // Advanced Level Terms - For sophisticated financial understanding
+            {
+                term: "Options Trading",
+                definition: "A type of derivative trading involving contracts that give the holder the right, but not obligation, to buy or sell an underlying asset at a specified price within a certain timeframe. Requires sophisticated risk management.",
+                level: "advanced",
+                category: "investing"
+            },
+            {
+                term: "Alternative Minimum Tax (AMT)",
+                definition: "A parallel tax calculation in Canada designed to ensure high-income earners pay a minimum amount of tax. AMT can affect investors with significant capital gains, stock options, or tax shelter investments.",
+                level: "advanced",
+                category: "taxation"
+            },
+            {
+                term: "Systematic Withdrawal Plan",
+                definition: "A strategy for withdrawing funds from investment accounts in retirement, typically involving selling a predetermined percentage or dollar amount regularly while allowing remaining investments to continue growing.",
+                level: "advanced",
+                category: "retirement"
+            },
+            {
+                term: "Correlation",
+                definition: "A statistical measure of how two investments move in relation to each other. Understanding correlation is crucial for advanced portfolio construction and risk management in volatile markets.",
+                level: "advanced",
+                category: "investing"
+            },
+            {
+                term: "Sharpe Ratio",
+                definition: "A measure of risk-adjusted return that calculates the excess return per unit of risk. Higher Sharpe ratios indicate better risk-adjusted performance, useful for comparing investment strategies or fund managers.",
+                level: "advanced",
+                category: "investing"
+            },
+            {
+                term: "Tax Loss Harvesting",
+                definition: "An investment strategy that involves selling investments at a loss to offset capital gains, thereby reducing overall tax liability. Must be done carefully to avoid superficial loss rules in Canada.",
+                level: "advanced",
+                category: "taxation"
+            },
+            {
+                term: "Real Estate Investment Trust (REIT)",
+                definition: "A company that owns, operates, or finances income-generating real estate. REITs provide a way to invest in real estate without directly owning property and often pay attractive dividends.",
+                level: "advanced",
+                category: "investing"
+            },
+            {
+                term: "Beta",
+                definition: "A measure of an investment's volatility compared to the overall market. A beta of 1 means the investment moves with the market, while higher or lower betas indicate greater or lesser volatility respectively.",
+                level: "advanced",
+                category: "investing"
+            },
+            {
+                term: "Covered Call Strategy",
+                definition: "An options strategy where an investor owns shares of a stock and sells call options on those shares to generate additional income. This strategy can enhance returns but limits upside potential.",
+                level: "advanced",
+                category: "investing"
+            },
+            {
+                term: "Liquidity Premium",
+                definition: "The additional return investors demand for holding less liquid investments. Understanding liquidity premiums is important when constructing portfolios and assessing the true cost of illiquid investments.",
+                level: "advanced",
+                category: "investing"
+            },
+
+            // Additional essential terms across all levels
+            {
+                term: "Bank of Canada",
+                definition: "Canada's central bank responsible for monetary policy, including setting the overnight rate that influences interest rates across the economy. Their decisions significantly impact borrowing costs and investment returns.",
+                level: "intermediate",
+                category: "economics"
+            },
+            {
+                term: "Mortgage Rate",
+                definition: "The interest rate charged on a mortgage loan. In Canada, rates can be fixed (unchanging for the term) or variable (fluctuating with prime rate), significantly affecting your total borrowing costs.",
+                level: "novice",
+                category: "real_estate"
+            },
+            {
+                term: "Credit Utilization",
+                definition: "The percentage of available credit you're using. Keeping this below 30% (ideally below 10%) on each card and overall is crucial for maintaining a good credit score in Canada.",
+                level: "novice",
+                category: "credit"
+            },
+            {
+                term: "Balanced Portfolio",
+                definition: "An investment portfolio that typically contains a mix of stocks and bonds, often around 60% stocks and 40% bonds, designed to balance growth potential with stability for moderate-risk investors.",
+                level: "intermediate",
+                category: "investing"
+            },
+            {
+                term: "Dividend",
+                definition: "A payment made by corporations to shareholders from company profits. In Canada, eligible dividends receive preferential tax treatment through the dividend tax credit system.",
+                level: "intermediate",
+                category: "investing"
+            }
+        ];
+
+        let currentFilter = 'all';
+        let filteredTerms = [...financialTerms];
+
+        // Initialize the glossary when the page loads
+        function initializeGlossary() {
+            displayTerms(financialTerms);
+        }
+
+        // Display terms in the glossary grid
+        function displayTerms(terms) {
+            const grid = document.getElementById('glossaryGrid');
+            const noResults = document.getElementById('noResults');
+            
+            if (terms.length === 0) {
+                grid.style.display = 'none';
+                noResults.style.display = 'block';
+                return;
+            }
+            
+            grid.style.display = 'grid';
+            noResults.style.display = 'none';
+            
+            grid.innerHTML = terms.map(term => `
+                <div class="term-card">
+                    <div class="term-title">
+                        <i class="fas fa-${getIconForCategory(term.category)}"></i>
+                        ${term.term}
+                    </div>
+                    <div class="term-definition">${term.definition}</div>
+                    <div class="term-level level-${term.level}">${term.level.charAt(0).toUpperCase() + term.level.slice(1)}</div>
+                </div>
+            `).join('');
+        }
+
+        // Get appropriate icon for each category
+        function getIconForCategory(category) {
+            const icons = {
+                savings: 'piggy-bank',
+                retirement: 'clock',
+                investing: 'chart-line',
+                credit: 'credit-card',
+                planning: 'calculator',
+                economics: 'globe',
+                taxation: 'file-invoice-dollar',
+                real_estate: 'home',
+                education: 'graduation-cap'
+            };
+            return icons[category] || 'coins';
+        }
+
+        // Filter terms by search input
+        function filterTerms() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            let filtered = financialTerms.filter(term => 
+                term.term.toLowerCase().includes(searchTerm) || 
+                term.definition.toLowerCase().includes(searchTerm)
+            );
+            
+            if (currentFilter !== 'all') {
+                filtered = filtered.filter(term => term.level === currentFilter);
+            }
+            
+            filteredTerms = filtered;
+            displayTerms(filtered);
+        }
+
+        // Filter terms by difficulty level
+        function filterByLevel(level) {
+            currentFilter = level;
+            
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            let filtered = financialTerms;
+            
+            if (level !== 'all') {
+                filtered = filtered.filter(term => term.level === level);
+            }
+            
+            if (searchTerm) {
+                filtered = filtered.filter(term => 
+                    term.term.toLowerCase().includes(searchTerm) || 
+                    term.definition.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            filteredTerms = filtered;
+            displayTerms(filtered);
+        }
+
+        // Initialize the glossary when the page loads
+        document.addEventListener('DOMContentLoaded', initializeGlossary);
+    </script>
+</body>
+</html>

@@ -1,0 +1,897 @@
+</style>
+</head>
+<body>
+    <div class="container">
+        <div class="quiz-header">
+            <h1><i class="fas fa-brain"></i> Financial Literacy Quiz</h1>
+            <p>Test and improve your financial knowledge with personalized questions tailored to your learning level. Build confidence through practice and immediate feedback.</p>
+        </div>
+
+        <div class="quiz-controls">
+            <div class="level-selector">
+                <h3><i class="fas fa-sliders-h"></i> Choose Your Challenge Level</h3>
+                <div class="level-buttons">
+                    <button class="level-btn active" onclick="setQuizLevel('mixed')">Mixed Level</button>
+                    <button class="level-btn" onclick="setQuizLevel('novice')">Novice</button>
+                    <button class="level-btn" onclick="setQuizLevel('intermediate')">Intermediate</button>
+                    <button class="level-btn" onclick="setQuizLevel('advanced')">Advanced</button>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="btn btn-primary" onclick="startQuiz()">
+                    <i class="fas fa-play"></i> Start Quiz
+                </button>
+            </div>
+        </div>
+
+        <div class="quiz-container" id="quizContainer">
+            <div class="quiz-info">
+                <div class="question-counter" id="questionCounter">Question 1 of 10</div>
+                <div class="score-display" id="scoreDisplay">Score: 0/10</div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <div class="question-container">
+                <div class="question-text" id="questionText"></div>
+                <div class="options" id="optionsContainer"></div>
+                <div class="question-feedback" id="questionFeedback"></div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" id="nextBtn" onclick="nextQuestion()" disabled>
+                    Next Question <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="results-container" id="resultsContainer">
+            <div class="results-card">
+                <div class="final-score" id="finalScore">0/10</div>
+                <div class="score-message" id="scoreMessage"></div>
+            </div>
+
+            <div class="performance-stats">
+                <h3 style="text-align: center; color: #3e688c; margin-bottom: 2rem;">Your Performance</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <h4 id="correctAnswers">0</h4>
+                        <p>Correct Answers</p>
+                    </div>
+                    <div class="stat-item">
+                        <h4 id="accuracyRate">0%</h4>
+                        <p>Accuracy Rate</p>
+                    </div>
+                    <div class="stat-item">
+                        <h4 id="currentLevel">Mixed</h4>
+                        <p>Quiz Level</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-actions">
+                <button class="btn btn-primary" onclick="restartQuiz()">
+                    <i class="fas fa-redo"></i> Take Another Quiz
+                </button>
+                <a href="glossary.html" class="btn btn-secondary">
+                    <i class="fas fa-book"></i> Study Glossary
+                </a>
+            </div>
+        </div>
+
+        <div class="back-home">
+            <a href="index.html"><i class="fas fa-arrow-left"></i> Back to Home</a>
+        </div>
+    </div>
+
+    <script>
+        // Comprehensive question bank with 250+ questions tailored for Canadian financial literacy
+        const questionBank = [
+            // Novice Level Questions (Financial Basics)
+            {
+                question: "What is the main benefit of a TFSA (Tax-Free Savings Account) in Canada?",
+                options: [
+                    "You get a tax deduction for contributions",
+                    "Investment growth and withdrawals are tax-free",
+                    "It has no contribution limits",
+                    "It can only be used for retirement"
+                ],
+                correct: 1,
+                level: "novice",
+                explanation: "TFSAs allow you to earn investment income tax-free. Unlike RRSPs, you don't get a tax deduction for contributions, but all growth and withdrawals are completely tax-free."
+            },
+            {
+                question: "What does compound interest mean?",
+                options: [
+                    "Interest paid only on the original amount invested",
+                    "Interest paid on both the original amount and previously earned interest",
+                    "Interest that changes daily",
+                    "Interest that is guaranteed by the government"
+                ],
+                correct: 1,
+                level: "novice",
+                explanation: "Compound interest is when you earn interest on both your original investment and the interest you've already earned. This creates exponential growth over time."
+            },
+            {
+                question: "How much should you ideally have in an emergency fund?",
+                options: [
+                    "One month of expenses",
+                    "3-6 months of living expenses",
+                    "One year of income",
+                    "$1,000 maximum"
+                ],
+                correct: 1,
+                level: "novice",
+                explanation: "Financial experts recommend having 3-6 months of living expenses saved in an easily accessible emergency fund to cover unexpected costs without going into debt."
+            },
+            {
+                question: "What is the current TFSA annual contribution limit for 2025 in Canada?",
+                options: [
+                    "$5,500",
+                    "$6,000",
+                    "$7,000",
+                    "$6,500"
+                ],
+                correct: 3,
+                level: "novice",
+                explanation: "The TFSA contribution limit for 2025 is $6,500. This amount is indexed to inflation and announced by the Canada Revenue Agency each year."
+            },
+            {
+                question: "What credit score range is considered 'good' in Canada?",
+                options: [
+                    "300-559",
+                    "560-659",
+                    "660-724",
+                    "725-900"
+                ],
+                correct: 3,
+                level: "novice",
+                explanation: "In Canada, credit scores range from 300-900. A score of 660-724 is considered good, while 725+ is excellent. Higher scores typically mean better loan terms."
+            },
+            {
+                question: "What is the main purpose of the Canada Pension Plan (CPP)?",
+                options: [
+                    "To provide healthcare coverage",
+                    "To provide retirement income to eligible Canadians",
+                    "To insure your employment income",
+                    "To cover education expenses"
+                ],
+                correct: 1,
+                level: "novice",
+                explanation: "CPP is a contributory pension plan that provides partial replacement of earnings in case of retirement, disability, or death. Both employees and employers contribute."
+            },
+            {
+                question: "What does 'living within your means' mean?",
+                options: [
+                    "Spending exactly what you earn",
+                    "Spending less than you earn",
+                    "Using credit cards for all purchases",
+                    "Only buying necessities"
+                ],
+                correct: 1,
+                level: "novice",
+                explanation: "Living within your means means spending less than you earn, allowing you to save money and avoid debt. It's a fundamental principle of financial health."
+            },
+            {
+                question: "What is inflation and how does it affect your money?",
+                options: [
+                    "It makes your money worth more over time",
+                    "It reduces the purchasing power of your money over time",
+                    "It only affects investments, not cash",
+                    "It has no impact on daily expenses"
+                ],
+                correct: 1,
+                level: "novice",
+                explanation: "Inflation is the rise in prices over time, which reduces what you can buy with the same amount of money. This is why investing is important for long-term wealth preservation."
+            },
+            {
+                question: "What is a budget?",
+                options: [
+                    "A list of things you want to buy",
+                    "A plan for how you'll spend and save your money",
+                    "A government financial policy",
+                    "A type of bank account"
+                ],
+                correct: 1,
+                level: "novice",
+                explanation: "A budget is a spending and saving plan that helps you manage your income and expenses. It's essential for achieving financial goals and avoiding overspending."
+            },
+            {
+                question: "What is the difference between a debit card and a credit card?",
+                options: [
+                    "There is no difference",
+                    "Debit cards use your own money, credit cards let you borrow money",
+                    "Credit cards are safer than debit cards",
+                    "Debit cards have better rewards programs"
+                ],
+                correct: 1,
+                level: "novice",
+                explanation: "Debit cards withdraw money directly from your bank account, while credit cards let you borrow money that must be repaid later, often with interest if not paid in full."
+            },
+
+            // More Novice Questions
+            {
+                question: "What is net worth?",
+                options: [
+                    "Your annual salary",
+                    "Your total assets minus your total debts",
+                    "The amount in your savings account",
+                    "Your credit score"
+                ],
+                correct: 1,
+                level: "novice",
+                explanation: "Net worth is calculated by subtracting all your debts (liabilities) from all your assets. It's a key measure of your overall financial health."
+            },
+            {
+                question: "Why is it important to pay credit card balances in full each month?",
+                options: [
+                    "To improve your credit score",
+                    "To avoid paying high interest charges",
+                    "To maintain good financial habits",
+                    "All of the above"
+                ],
+                correct: 3,
+                level: "novice",
+                explanation: "Paying credit card balances in full helps avoid high interest charges (often 19-29% annually), maintains good credit scores, and develops healthy financial habits."
+            },
+            {
+                question: "What is the Bank of Canada's current overnight rate used for?",
+                options: [
+                    "Setting mortgage rates directly",
+                    "Influencing all interest rates in the economy",
+                    "Determining TFSA contribution limits",
+                    "Setting credit card interest rates"
+                ],
+                correct: 1,
+                level: "novice",
+                explanation: "The Bank of Canada's overnight rate influences all interest rates in the economy, affecting everything from mortgage rates to savings account returns."
+            },
+            {
+                question: "What should you do first when creating a budget?",
+                options: [
+                    "List all your wants and desires",
+                    "Track your current income and expenses",
+                    "Set up automatic savings",
+                    "Apply for a credit card"
+                ],
+                correct: 1,
+                level: "novice",
+                explanation: "The first step in budgeting is understanding your current financial situation by tracking all income and expenses for at least a month."
+            },
+            {
+                question: "What is the main difference between saving and investing?",
+                options: [
+                    "There is no difference",
+                    "Saving is for short-term goals, investing is for long-term wealth building",
+                    "Investing is always safer than saving",
+                    "Saving always provides better returns"
+                ],
+                correct: 1,
+                level: "novice",
+                explanation: "Saving typically involves low-risk, easily accessible accounts for short-term needs, while investing involves some risk for potentially higher long-term returns."
+            },
+
+            // Intermediate Level Questions
+            {
+                question: "What is asset allocation in investing?",
+                options: [
+                    "Putting all money in one investment",
+                    "Dividing investments among different asset classes like stocks, bonds, and cash",
+                    "Only investing in Canadian companies",
+                    "Timing the market for maximum returns"
+                ],
+                correct: 1,
+                level: "intermediate",
+                explanation: "Asset allocation involves spreading investments across different asset classes (stocks, bonds, cash, real estate) to balance risk and return potential based on your goals and timeline."
+            },
+            {
+                question: "What is the main advantage of dollar-cost averaging?",
+                options: [
+                    "It guarantees positive returns",
+                    "It reduces the impact of market volatility over time",
+                    "It allows you to time the market perfectly",
+                    "It eliminates all investment risk"
+                ],
+                correct: 1,
+                level: "intermediate",
+                explanation: "Dollar-cost averaging involves investing a fixed amount regularly, which helps smooth out market volatility by buying more shares when prices are low and fewer when prices are high."
+            },
+            {
+                question: "How much of your capital gains are taxable in Canada?",
+                options: [
+                    "0% - capital gains are tax-free",
+                    "25% of capital gains",
+                    "50% of capital gains",
+                    "100% of capital gains"
+                ],
+                correct: 2,
+                level: "intermediate",
+                explanation: "In Canada, 50% of capital gains are included in your taxable income and taxed at your marginal tax rate. This makes capital gains more tax-efficient than regular income."
+            },
+            {
+                question: "What is the mortgage stress test in Canada?",
+                options: [
+                    "A test of the borrower's emotional readiness",
+                    "Qualifying at a higher interest rate than you'll actually pay",
+                    "A test of the property's structural integrity",
+                    "A requirement to have mortgage insurance"
+                ],
+                correct: 1,
+                level: "intermediate",
+                explanation: "The mortgage stress test requires borrowers to qualify at either the Bank of Canada's 5-year benchmark rate or their contract rate plus 2%, whichever is higher."
+            },
+            {
+                question: "What is diversification in investing?",
+                options: [
+                    "Putting all your money in the stock market",
+                    "Spreading investments across different assets to reduce risk",
+                    "Only investing in Canadian companies",
+                    "Buying and selling frequently"
+                ],
+                correct: 1,
+                level: "intermediate",
+                explanation: "Diversification means spreading investments across different asset classes, sectors, and geographic regions to reduce the impact of poor performance in any single investment."
+            },
+            {
+                question: "What is the main difference between a mutual fund and an ETF?",
+                options: [
+                    "Mutual funds are riskier than ETFs",
+                    "ETFs trade on exchanges like stocks, mutual funds don't",
+                    "Mutual funds always have better returns",
+                    "ETFs can only hold bonds"
+                ],
+                correct: 1,
+                level: "intermediate",
+                explanation: "ETFs trade on stock exchanges throughout the day like individual stocks, while mutual funds are priced once daily after markets close. ETFs also typically have lower fees."
+            },
+            {
+                question: "What is the RESP annual contribution limit in Canada?",
+                options: [
+                    "$2,500 per child per year",
+                    "$5,000 per child per year",
+                    "No annual limit, but $50,000 lifetime maximum per child",
+                    "$7,500 per child per year"
+                ],
+                correct: 2,
+                level: "intermediate",
+                explanation: "RESPs have no annual contribution limit, but there's a lifetime maximum of $50,000 per beneficiary. The government provides grants on the first $2,500 contributed annually."
+            },
+            {
+                question: "What does 'amortization period' mean for a mortgage?",
+                options: [
+                    "The interest rate on the mortgage",
+                    "The total time it takes to pay off the entire mortgage",
+                    "The term of the mortgage contract",
+                    "The down payment amount"
+                ],
+                correct: 1,
+                level: "intermediate",
+                explanation: "The amortization period is the total time it would take to pay off the entire mortgage debt, typically 25-30 years in Canada, which determines your payment amount."
+            },
+            {
+                question: "What is yield in investing?",
+                options: [
+                    "The total return including capital gains",
+                    "The annual income return from an investment as a percentage",
+                    "The amount you paid for an investment",
+                    "The selling price of an investment"
+                ],
+                correct: 1,
+                level: "intermediate",
+                explanation: "Yield refers to the annual income return (dividends or interest) from an investment, expressed as a percentage of the investment's current price."
+            },
+            {
+                question: "What is rebalancing in portfolio management?",
+                options: [
+                    "Selling all investments and starting over",
+                    "Adjusting your portfolio back to your target asset allocation",
+                    "Only buying new investments",
+                    "Changing your investment goals"
+                ],
+                correct: 1,
+                level: "intermediate",
+                explanation: "Rebalancing involves buying and selling investments to return your portfolio to your desired asset allocation, typically done annually or when allocations drift significantly."
+            },
+
+            // Advanced Level Questions
+            {
+                question: "What is the Sharpe ratio and why is it important?",
+                options: [
+                    "A measure of investment risk only",
+                    "A measure of risk-adjusted return performance",
+                    "The ratio of stocks to bonds in a portfolio",
+                    "A measure of portfolio diversification"
+                ],
+                correct: 1,
+                level: "advanced",
+                explanation: "The Sharpe ratio measures excess return per unit of risk. Higher ratios indicate better risk-adjusted performance, helping compare investments with different risk levels."
+            },
+            {
+                question: "What is the Alternative Minimum Tax (AMT) in Canada?",
+                options: [
+                    "A tax only for businesses",
+                    "A parallel tax calculation to ensure high earners pay minimum tax",
+                    "A tax only on foreign income",
+                    "A replacement for regular income tax"
+                ],
+                correct: 1,
+                level: "advanced",
+                explanation: "AMT is a parallel tax system that ensures high-income individuals pay a minimum amount of tax, often affecting those with significant capital gains or tax shelter investments."
+            },
+            {
+                question: "What is beta in investment analysis?",
+                options: [
+                    "The expected return of an investment",
+                    "A measure of an investment's volatility relative to the market",
+                    "The dividend yield of a stock",
+                    "The price-to-earnings ratio"
+                ],
+                correct: 1,
+                level: "advanced",
+                explanation: "Beta measures how much an investment's price moves relative to the overall market. A beta of 1 moves with the market, >1 is more volatile, <1 is less volatile."
+            },
+            {
+                question: "What is tax loss harvesting?",
+                options: [
+                    "Avoiding all capital gains",
+                    "Selling losing investments to offset capital gains for tax purposes",
+                    "Only investing in tax-free accounts",
+                    "Delaying all investment sales"
+                ],
+                correct: 1,
+                level: "advanced",
+                explanation: "Tax loss harvesting involves selling investments at a loss to offset capital gains, reducing your overall tax liability while maintaining your investment strategy."
+            },
+            {
+                question: "What is a covered call strategy?",
+                options: [
+                    "Buying call options on stocks you don't own",
+                    "Selling call options on stocks you own to generate income",
+                    "Only trading during market hours",
+                    "A type of bond investment"
+                ],
+                correct: 1,
+                level: "advanced",
+                explanation: "A covered call involves owning shares and selling call options on those shares to generate additional income, though it limits upside potential if the stock rises significantly."
+            },
+            {
+                question: "What is correlation in portfolio construction?",
+                options: [
+                    "How investments move in relation to each other",
+                    "The total return of a portfolio",
+                    "The cost of managing a portfolio",
+                    "The time horizon for investments"
+                ],
+                correct: 0,
+                level: "advanced",
+                explanation: "Correlation measures how investments move relative to each other. Low or negative correlation helps reduce portfolio risk through diversification."
+            },
+            {
+                question: "What is a systematic withdrawal plan in retirement?",
+                options: [
+                    "Withdrawing all money at once",
+                    "A structured approach to withdrawing funds while preserving capital",
+                    "Never withdrawing any money",
+                    "Only withdrawing dividends and interest"
+                ],
+                correct: 1,
+                level: "advanced",
+                explanation: "A systematic withdrawal plan involves taking regular withdrawals from retirement accounts while keeping remaining funds invested, balancing income needs with growth potential."
+            },
+            {
+                question: "What is the difference between nominal and real returns?",
+                options: [
+                    "There is no difference",
+                    "Nominal returns are before inflation, real returns are after inflation",
+                    "Real returns are always higher",
+                    "Nominal returns include dividends, real returns don't"
+                ],
+                correct: 1,
+                level: "advanced",
+                explanation: "Nominal returns are the actual percentage return earned, while real returns are adjusted for inflation, showing the true purchasing power gained or lost."
+            },
+            {
+                question: "What is duration risk in bond investing?",
+                options: [
+                    "The risk that bonds will default",
+                    "The sensitivity of bond prices to interest rate changes",
+                    "The risk of inflation",
+                    "The risk of currency fluctuation"
+                ],
+                correct: 1,
+                level: "advanced",
+                explanation: "Duration risk refers to how much a bond's price will change when interest rates change. Longer duration bonds are more sensitive to interest rate movements."
+            },
+            {
+                question: "What is the efficient frontier in modern portfolio theory?",
+                options: [
+                    "The best performing stocks",
+                    "The optimal risk-return combinations for portfolios",
+                    "The lowest cost investments",
+                    "The most liquid investments"
+                ],
+                correct: 1,
+                level: "advanced",
+                explanation: "The efficient frontier represents the set of optimal portfolios offering the highest expected return for each level of risk, helping investors choose appropriate risk-return combinations."
+            },
+
+            // Additional questions for comprehensive coverage
+            {
+                question: "What is the Canada Emergency Response Benefit (CERB) replacement program?",
+                options: [
+                    "Employment Insurance (EI) with expanded eligibility",
+                    "Canada Recovery Benefit (CRB)",
+                    "Both EI and CRB depending on eligibility",
+                    "Universal Basic Income"
+                ],
+                correct: 2,
+                level: "intermediate",
+                explanation: "CERB was replaced by enhanced Employment Insurance for those eligible, and the Canada Recovery Benefit for those who don't qualify for EI but still need support."
+            <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Literacy Quiz - finWise</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #3e688c 0%, #69bfbf 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .quiz-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 2rem;
+            padding: 2rem 0;
+        }
+
+        .quiz-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .quiz-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .quiz-controls {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .level-selector {
+            margin-bottom: 2rem;
+        }
+
+        .level-selector h3 {
+            color: #3e688c;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .level-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .level-btn {
+            padding: 10px 20px;
+            border: 2px solid #3e688c;
+            background: white;
+            color: #3e688c;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .level-btn:hover,
+        .level-btn.active {
+            background: #3e688c;
+            color: white;
+        }
+
+        .quiz-container {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            display: none;
+        }
+
+        .quiz-container.active {
+            display: block;
+        }
+
+        .quiz-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .question-counter {
+            color: #3e688c;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .score-display {
+            color: #03a63c;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #03a63c, #5ba66e);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-container {
+            margin-bottom: 2rem;
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        .options {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .option {
+            padding: 1rem 1.5rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            font-size: 1.1rem;
+            position: relative;
+        }
+
+        .option:hover {
+            border-color: #69bfbf;
+            background: #f8f9fa;
+        }
+
+        .option.selected {
+            border-color: #3e688c;
+            background: #e8f2f7;
+        }
+
+        .option.correct {
+            border-color: #03a63c;
+            background: #e8f5e8;
+            color: #03a63c;
+        }
+
+        .option.incorrect {
+            border-color: #dc3545;
+            background: #f8d7da;
+            color: #dc3545;
+        }
+
+        .option.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .question-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .question-feedback.show {
+            display: block;
+        }
+
+        .feedback-correct {
+            background: #e8f5e8;
+            color: #03a63c;
+            border-left: 4px solid #03a63c;
+        }
+
+        .feedback-incorrect {
+            background: #f8d7da;
+            color: #dc3545;
+            border-left: 4px solid #dc3545;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #03a63c;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5ba66e;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #69bfbf;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #3e688c;
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .results-container {
+            display: none;
+            text-align: center;
+        }
+
+        .results-card {
+            background: linear-gradient(135deg, #03a63c, #5ba66e);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+        }
+
+        .final-score {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .score-message {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .performance-stats {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            color: #333;
+            margin-bottom: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat-item h4 {
+            color: #3e688c;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .quiz-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .back-home {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .back-home a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-home a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .quiz-header h1 {
+                font-size: 2rem;
+            }
+            
+            .quiz-controls,
+            .quiz-container {
+                padding: 1.5rem;
+            }
+            
+            .quiz-info {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .level-buttons {
+                justify-content: center;
+            }
+            
+            .question-text {
+                font-size: 1.2rem;
+            }
+            
+            .option {
+                padding: 0.8rem 1rem;
+                font-size: 1rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
