@@ -1,6 +1,448 @@
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Literacy Quiz - finWise</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #3e688c 0%, #69bfbf 100%);
+            min-height: 100vh;
+            padding-top: 60px; /* Added padding for fixed header */
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header and Navigation Styles (copied from index.html) */
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            transition: background 0.3s ease, border-bottom 0.3s ease;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #03a63c;
+        }
+
+        /* Styles for when the header is scrolled */
+        header.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        header.scrolled .logo {
+            color: #3e688c;
+        }
+
+        header.scrolled .nav-links a {
+            color: #333;
+        }
+
+        header.scrolled .nav-links a:hover {
+            color: #03a63c;
+        }
+        /* End Header and Navigation Styles */
+
+        .quiz-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 2rem;
+            padding: 2rem 0;
+        }
+
+        .quiz-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .quiz-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .quiz-controls {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .level-selector {
+            margin-bottom: 2rem;
+        }
+
+        .level-selector h3 {
+            color: #3e688c;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .level-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .level-btn {
+            padding: 10px 20px;
+            border: 2px solid #3e688c;
+            background: white;
+            color: #3e688c;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .level-btn:hover,
+        .level-btn.active {
+            background: #3e688c;
+            color: white;
+        }
+
+        .quiz-container {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            display: none;
+        }
+
+        .quiz-container.active {
+            display: block;
+        }
+
+        .quiz-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .question-counter {
+            color: #3e688c;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .score-display {
+            color: #03a63c;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #03a63c, #5ba66e);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-container {
+            margin-bottom: 2rem;
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        .options {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .option {
+            padding: 1rem 1.5rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            font-size: 1.1rem;
+            position: relative;
+        }
+
+        .option:hover {
+            border-color: #69bfbf;
+            background: #f8f9fa;
+        }
+
+        .option.selected {
+            border-color: #3e688c;
+            background: #e8f2f7;
+        }
+
+        .option.correct {
+            border-color: #03a63c;
+            background: #e8f5e8;
+            color: #03a63c;
+        }
+
+        .option.incorrect {
+            border-color: #dc3545;
+            background: #f8d7da;
+            color: #dc3545;
+        }
+
+        .option.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .question-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .question-feedback.show {
+            display: block;
+        }
+
+        .feedback-correct {
+            background: #e8f5e8;
+            color: #03a63c;
+            border-left: 4px solid #03a63c;
+        }
+
+        .feedback-incorrect {
+            background: #f8d7da;
+            color: #dc3545;
+            border-left: 4px solid #dc3545;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #03a63c;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5ba66e;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #69bfbf;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #3e688c;
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .results-container {
+            display: none;
+            text-align: center;
+        }
+
+        .results-card {
+            background: linear-gradient(135deg, #03a63c, #5ba66e);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+        }
+
+        .final-score {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .score-message {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .performance-stats {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            color: #333;
+            margin-bottom: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat-item h4 {
+            color: #3e688c;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .quiz-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .back-home {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .back-home a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-home a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .quiz-header h1 {
+                font-size: 2rem;
+            }
+            
+            .quiz-controls,
+            .quiz-container {
+                padding: 1.5rem;
+            }
+            
+            .quiz-info {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .level-buttons {
+                justify-content: center;
+            }
+            
+            .question-text {
+                font-size: 1.2rem;
+            }
+            
+            .option {
+                padding: 0.8rem 1rem;
+                font-size: 1rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
+    <header id="mainHeader">
+        <nav class="container">
+            <a href="index.html" class="logo"><i class="fas fa-chart-line"></i> finWise</a>
+            <ul class="nav-links">
+            <ul class="nav-links">
+                <li><a href="quiz.html">Quiz</a></li>
+                <li><a href="quiz_level.html">Assessment</a></li>
+                <li><a href="glossary.html">Glossary</a></li>
+            </ul>
+        </nav>
+    </header>
+    <br><br>
     <div class="container">
         <div class="quiz-header">
             <h1><i class="fas fa-brain"></i> Financial Literacy Quiz</h1>
@@ -88,6 +530,26 @@
     </div>
 
     <script>
+        // Get the header element
+        const header = document.getElementById('mainHeader');
+        // Define the scroll threshold
+        const scrollThreshold = 50; 
+
+        // Function to handle scroll event
+        function handleScroll() {
+            if (window.scrollY > scrollThreshold) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        }
+
+        // Add scroll event listener
+        window.addEventListener('scroll', handleScroll);
+
+        // Initial check in case the page is loaded with a scroll position
+        document.addEventListener('DOMContentLoaded', handleScroll);
+
         // Comprehensive question bank with 250+ questions tailored for Canadian financial literacy
         const questionBank = [
             // Novice Level Questions (Financial Basics)
@@ -530,368 +992,285 @@
                 correct: 2,
                 level: "intermediate",
                 explanation: "CERB was replaced by enhanced Employment Insurance for those eligible, and the Canada Recovery Benefit for those who don't qualify for EI but still need support."
-            <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Financial Literacy Quiz - finWise</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #3e688c 0%, #69bfbf 100%);
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .quiz-header {
-            text-align: center;
-            color: white;
-            margin-bottom: 2rem;
-            padding: 2rem 0;
-        }
-
-        .quiz-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .quiz-header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .quiz-controls {
-            background: white;
-            border-radius: 15px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        .level-selector {
-            margin-bottom: 2rem;
-        }
-
-        .level-selector h3 {
-            color: #3e688c;
-            margin-bottom: 1rem;
-            font-size: 1.3rem;
-        }
-
-        .level-buttons {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .level-btn {
-            padding: 10px 20px;
-            border: 2px solid #3e688c;
-            background: white;
-            color: #3e688c;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-
-        .level-btn:hover,
-        .level-btn.active {
-            background: #3e688c;
-            color: white;
-        }
-
-        .quiz-container {
-            background: white;
-            border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            margin-bottom: 2rem;
-            display: none;
-        }
-
-        .quiz-container.active {
-            display: block;
-        }
-
-        .quiz-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid #f0f0f0;
-        }
-
-        .question-counter {
-            color: #3e688c;
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-
-        .score-display {
-            color: #03a63c;
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: #e0e0e0;
-            border-radius: 4px;
-            margin-bottom: 2rem;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #03a63c, #5ba66e);
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        .question-container {
-            margin-bottom: 2rem;
-        }
-
-        .question-text {
-            font-size: 1.3rem;
-            color: #333;
-            margin-bottom: 1.5rem;
-            font-weight: 500;
-            line-height: 1.5;
-        }
-
-        .options {
-            display: grid;
-            gap: 1rem;
-        }
-
-        .option {
-            padding: 1rem 1.5rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: white;
-            font-size: 1.1rem;
-            position: relative;
-        }
-
-        .option:hover {
-            border-color: #69bfbf;
-            background: #f8f9fa;
-        }
-
-        .option.selected {
-            border-color: #3e688c;
-            background: #e8f2f7;
-        }
-
-        .option.correct {
-            border-color: #03a63c;
-            background: #e8f5e8;
-            color: #03a63c;
-        }
-
-        .option.incorrect {
-            border-color: #dc3545;
-            background: #f8d7da;
-            color: #dc3545;
-        }
-
-        .option.disabled {
-            cursor: not-allowed;
-            opacity: 0.7;
-        }
-
-        .question-feedback {
-            margin-top: 1rem;
-            padding: 1rem;
-            border-radius: 8px;
-            display: none;
-        }
-
-        .question-feedback.show {
-            display: block;
-        }
-
-        .feedback-correct {
-            background: #e8f5e8;
-            color: #03a63c;
-            border-left: 4px solid #03a63c;
-        }
-
-        .feedback-incorrect {
-            background: #f8d7da;
-            color: #dc3545;
-            border-left: 4px solid #dc3545;
-        }
-
-        .navigation {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 2rem;
-        }
-
-        .btn {
-            padding: 12px 30px;
-            border: none;
-            border-radius: 25px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-primary {
-            background: #03a63c;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #5ba66e;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: #69bfbf;
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            background: #3e688c;
-        }
-
-        .btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .results-container {
-            display: none;
-            text-align: center;
-        }
-
-        .results-card {
-            background: linear-gradient(135deg, #03a63c, #5ba66e);
-            color: white;
-            padding: 3rem 2rem;
-            border-radius: 15px;
-            margin-bottom: 2rem;
-        }
-
-        .final-score {
-            font-size: 4rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
-        }
-
-        .score-message {
-            font-size: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .performance-stats {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            color: #333;
-            margin-bottom: 2rem;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            text-align: center;
-        }
-
-        .stat-item h4 {
-            color: #3e688c;
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .quiz-actions {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .back-home {
-            text-align: center;
-            margin-top: 2rem;
-        }
-
-        .back-home a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .back-home a:hover {
-            text-decoration: underline;
-        }
-
-        @media (max-width: 768px) {
-            .quiz-header h1 {
-                font-size: 2rem;
+            },
+            {
+                question: "What is a 'bear market'?",
+                options: [
+                    "A market where prices are rising",
+                    "A market characterized by falling prices and investor pessimism",
+                    "A market with stable prices",
+                    "A market where only bonds are traded"
+                ],
+                correct: 1,
+                level: "intermediate",
+                explanation: "A bear market is a period where stock prices are generally falling, often accompanied by widespread investor pessimism and economic slowdown."
+            },
+            {
+                question: "What is the primary role of a financial advisor?",
+                options: [
+                    "To guarantee high investment returns",
+                    "To provide personalized financial guidance and planning",
+                    "To manage your bank account daily",
+                    "To sell specific financial products only"
+                ],
+                correct: 1,
+                level: "novice",
+                explanation: "A financial advisor helps you set financial goals, create a plan, and make informed decisions about investments, retirement, and other financial matters."
+            },
+            {
+                question: "What is the difference between gross and net income?",
+                options: [
+                    "No difference",
+                    "Gross is income before deductions, net is after deductions",
+                    "Net is always higher than gross",
+                    "Gross only applies to investments"
+                ],
+                correct: 1,
+                level: "novice",
+                explanation: "Gross income is your total earnings before any deductions (like taxes or benefits), while net income is what you take home after all deductions."
+            },
+            {
+                question: "What is a credit report?",
+                options: [
+                    "A list of your bank accounts",
+                    "A detailed summary of your credit history",
+                    "A document showing your annual income",
+                    "A record of your spending habits"
+                ],
+                correct: 1,
+                level: "novice",
+                explanation: "A credit report is a detailed record of your borrowing and repayment history, used by lenders to assess your creditworthiness."
+            },
+            {
+                question: "What is a 'bull market'?",
+                options: [
+                    "A market where prices are falling",
+                    "A market characterized by rising prices and investor optimism",
+                    "A market with high volatility",
+                    "A market where only commodities are traded"
+                ],
+                correct: 1,
+                level: "intermediate",
+                explanation: "A bull market is a period where stock prices are generally rising, often accompanied by investor optimism and economic growth."
+            },
+            {
+                question: "What is a 'liquidity premium'?",
+                options: [
+                    "A bonus for holding highly liquid assets",
+                    "The additional return demanded for holding less liquid investments",
+                    "A fee charged for withdrawing cash",
+                    "The interest rate on a savings account"
+                ],
+                correct: 1,
+                level: "advanced",
+                explanation: "A liquidity premium is the extra return investors require for holding assets that cannot be easily converted to cash without a significant loss in value."
+            },
+            {
+                question: "What is 'systemic risk' in finance?",
+                options: [
+                    "Risk specific to a single company",
+                    "Risk of collapse of an entire financial system or market",
+                    "Risk of losing money on a single investment",
+                    "Risk related to a country's political stability"
+                ],
+                correct: 1,
+                level: "advanced",
+                explanation: "Systemic risk is the risk that the failure of one financial institution or market segment could trigger a cascade of failures across the entire financial system."
+            },
+            {
+                question: "What is 'asset-backed security' (ABS)?",
+                options: [
+                    "A security backed by physical gold",
+                    "A financial security backed by a pool of assets, often loans or receivables",
+                    "A security issued by a government",
+                    "A stock that pays high dividends"
+                ],
+                correct: 1,
+                level: "advanced",
+                explanation: "An asset-backed security (ABS) is a financial security collateralized by a pool of assets—such as loans, leases, credit card receivables, or royalties—that generate cash flow."
+            },
+            {
+                question: "What is the 'time value of money'?",
+                options: [
+                    "The idea that money today is worth less than money in the future",
+                    "The concept that money available at the present time is worth more than the identical sum in the future due to its potential earning capacity",
+                    "The cost of borrowing money",
+                    "The rate of inflation over time"
+                ],
+                correct: 1,
+                level: "intermediate",
+                explanation: "The time value of money is the concept that a sum of money is worth more now than the same sum will be at a future date due to its potential earning capacity."
             }
-            
-            .quiz-controls,
-            .quiz-container {
-                padding: 1.5rem;
+        ];
+
+        const quizContainer = document.getElementById('quizContainer');
+        const quizControls = document.querySelector('.quiz-controls');
+        const questionText = document.getElementById('questionText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const nextBtn = document.getElementById('nextBtn');
+        const questionCounter = document.getElementById('questionCounter');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const progressFill = document.getElementById('progressFill');
+        const questionFeedback = document.getElementById('questionFeedback');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const finalScore = document.getElementById('finalScore');
+        const scoreMessage = document.getElementById('scoreMessage');
+        const correctAnswersDisplay = document.getElementById('correctAnswers');
+        const accuracyRateDisplay = document.getElementById('accuracyRate');
+        const currentLevelDisplay = document.getElementById('currentLevel');
+
+        let currentQuestions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let quizLevel = 'mixed'; // Default level
+
+        const QUIZ_LENGTH = 10; // Number of questions per quiz
+
+        // Function to set the quiz level
+        function setQuizLevel(level) {
+            quizLevel = level;
+            document.querySelectorAll('.level-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            currentLevelDisplay.textContent = level.charAt(0).toUpperCase() + level.slice(1);
+        }
+
+        // Function to start the quiz
+        function startQuiz() {
+            quizControls.style.display = 'none';
+            quizContainer.style.display = 'block';
+            quizContainer.classList.add('active'); // Show quiz container
+
+            // Filter questions based on selected level
+            let availableQuestions = [];
+            if (quizLevel === 'mixed') {
+                availableQuestions = [...questionBank]; // Use all questions for mixed
+            } else {
+                availableQuestions = questionBank.filter(q => q.level === quizLevel);
             }
-            
-            .quiz-info {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
+
+            // Shuffle and select questions
+            currentQuestions = shuffleArray(availableQuestions).slice(0, QUIZ_LENGTH);
+            currentQuestionIndex = 0;
+            score = 0;
+            displayQuestion();
+            updateQuizInfo();
+            resultsContainer.style.display = 'none'; // Hide results container
+        }
+
+        // Function to display a question
+        function displayQuestion() {
+            const question = currentQuestions[currentQuestionIndex];
+            questionText.textContent = question.question;
+            optionsContainer.innerHTML = '';
+            questionFeedback.style.display = 'none'; // Hide feedback for new question
+            questionFeedback.classList.remove('feedback-correct', 'feedback-incorrect', 'show'); // Clear classes
+
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.classList.add('option');
+                optionElement.textContent = option;
+                optionElement.onclick = () => selectOption(index);
+                optionsContainer.appendChild(optionElement);
+            });
+
+            nextBtn.disabled = true; // Disable next button until an option is selected
+            updateQuizInfo();
+        }
+
+        // Function to handle option selection
+        function selectOption(selectedIndex) {
+            const question = currentQuestions[currentQuestionIndex];
+            const options = optionsContainer.children;
+
+            // Disable all options after selection
+            Array.from(options).forEach(option => {
+                option.classList.add('disabled');
+                option.onclick = null; // Remove click listener
+            });
+
+            // Mark selected option
+            options[selectedIndex].classList.add('selected');
+
+            // Check if correct and provide feedback
+            if (selectedIndex === question.correct) {
+                score++;
+                options[selectedIndex].classList.add('correct');
+                questionFeedback.textContent = "Correct! " + question.explanation;
+                questionFeedback.classList.add('feedback-correct', 'show');
+            } else {
+                options[selectedIndex].classList.add('incorrect');
+                options[question.correct].classList.add('correct'); // Show correct answer
+                questionFeedback.textContent = "Incorrect. " + question.explanation;
+                questionFeedback.classList.add('feedback-incorrect', 'show');
             }
-            
-            .level-buttons {
-                justify-content: center;
-            }
-            
-            .question-text {
-                font-size: 1.2rem;
-            }
-            
-            .option {
-                padding: 0.8rem 1rem;
-                font-size: 1rem;
-            }
-            
-            .stats-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
+
+            nextBtn.disabled = false; // Enable next button
+            updateQuizInfo();
+        }
+
+        // Function to move to the next question
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < QUIZ_LENGTH) {
+                displayQuestion();
+            } else {
+                showResults();
             }
         }
+
+        // Function to update quiz information (counter, score, progress)
+        function updateQuizInfo() {
+            questionCounter.textContent = `Question ${currentQuestionIndex + 1} of ${QUIZ_LENGTH}`;
+            scoreDisplay.textContent = `Score: ${score}/${QUIZ_LENGTH}`;
+            const progress = ((currentQuestionIndex + (nextBtn.disabled ? 0 : 1)) / QUIZ_LENGTH) * 100;
+            progressFill.style.width = `${progress}%`;
+        }
+
+        // Function to show quiz results
+        function showResults() {
+            quizContainer.style.display = 'none';
+            resultsContainer.style.display = 'block';
+
+            finalScore.textContent = `${score}/${QUIZ_LENGTH}`;
+            const accuracy = (score / QUIZ_LENGTH) * 100;
+            accuracyRateDisplay.textContent = `${accuracy.toFixed(0)}%`;
+            correctAnswersDisplay.textContent = score;
+
+            if (accuracy >= 80) {
+                scoreMessage.textContent = "Excellent! You have a strong grasp of financial literacy.";
+            } else if (accuracy >= 50) {
+                scoreMessage.textContent = "Good effort! Keep practicing to improve your knowledge.";
+            } else {
+                scoreMessage.textContent = "You're just getting started. Review the basics and try again!";
+            }
+        }
+
+        // Function to restart the quiz
+        function restartQuiz() {
+            quizControls.style.display = 'block';
+            quizContainer.style.display = 'none';
+            resultsContainer.style.display = 'none';
+            // Reset progress bar
+            progressFill.style.width = '0%';
+            // Reset active level button to mixed
+            document.querySelectorAll('.level-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector('.level-btn.active').classList.add('active'); // Re-activate mixed
+            quizLevel = 'mixed';
+            currentLevelDisplay.textContent = 'Mixed';
+        }
+
+        // Utility function to shuffle an array (Fisher-Yates algorithm)
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+    </script>
+</body>
+</html>
