@@ -159,8 +159,9 @@
 
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 3rem;
+            /* Changed to create 4 equal columns on larger screens */
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem; /* Reduced gap slightly for better fit */
             margin-top: 3rem;
         }
 
@@ -253,6 +254,7 @@
             }
             
             .features-grid {
+                /* This existing rule ensures cards stack on smaller screens */
                 grid-template-columns: 1fr;
             }
         }
