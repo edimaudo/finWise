@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinWise Pitch Deck</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8FAFC;
+            color: #1F2937;
+            overflow: hidden; /* Prevent scrolling */
+        }
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .slide {
+            width: 80%;
+            height: 80%;
+            background-color: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            transition: opacity 0.5s ease-in-out;
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .slide.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .slide h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .slide h2 {
+            font-size: 2rem;
+            font-weight: 500;
+            text-align: center;
+            color: #6B7280;
+        }
+        .slide p {
+            font-size: 1.25rem;
+            line-height: 1.75;
+            text-align: center;
+            max-width: 800px;
+        }
+        .slide ul {
+            list-style-type: disc;
+            font-size: 1.25rem;
+            line-height: 1.5;
+            text-align: left;
+            padding: 0;
+            max-width: fit-content;
+        }
+        .slide li {
+            margin-bottom: 0.75rem;
+        }
+        .slide-content-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            max-width: 90%;
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 768px) {
+            .slide {
+                width: 95%;
+                height: 95%;
+                padding: 1rem;
+            }
+            .slide h1 {
+                font-size: 2rem;
+            }
+            .slide h2 {
+                font-size: 1.5rem;
+            }
+            .slide p, .slide li {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="presentation-container">
+
+        <!-- Slide 1: Cover Slide -->
+        <div id="slide1" class="slide active">
+            <h1 class="text-[#1F2937]">FinWise</h1>
+            <h2 class="text-[#6B7280]">A Path to Canadian Financial Literacy</h2>
+        </div>
+
+        <!-- Slide 2: Overview -->
+        <div id="slide2" class="slide">
+            <div class="slide-content-container">
+                <h1 class="text-[#1F2937] mb-8">What it does</h1>
+                <p class="mb-4">It helps Canadians build financial skills, all while maintaining engagement through personalization. The app provides several key features to achieve this:</p>
+                <ul class="list-disc ml-8">
+                    <li>A quiz assessment to check your current financial literacy level.</li>
+                    <li>A personalized quiz based on your literacy level to help you learn.</li>
+                    <li>A comprehensive glossary to learn more about financial and economic terms.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 3: How we built it -->
+        <div id="slide3" class="slide">
+            <div class="slide-content-container">
+                <h1 class="text-[#1F2937] mb-8">How We Built It</h1>
+                <p class="mb-4">FinWise was built with a focus on simplicity and functionality:</p>
+                <ul class="list-disc ml-8">
+                    <li>Developed using HTML, CSS, and TypeScript.</li>
+                    <li>Questions for the quizzes were gathered from various websites.</li>
+                    <li>Leveraged Google Gemini to refine and clean up the codebase.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 4: Demo Slide -->
+        <div id="slide4" class="slide">
+            <h1 class="text-[#1F2937]">Demo</h1>
+        </div>
+
+        <!-- Slide 5: Next Steps -->
+        <div id="slide5" class="slide">
+            <div class="slide-content-container">
+                <h1 class="text-[#1F2937] mb-8">What's Next for FinWise</h1>
+                <p class="mb-4">We have big plans to expand the app's capabilities and content:</p>
+                <ul class="list-disc ml-8">
+                    <li>Continue to add more educational content.</li>
+                    <li>Update the quiz section with more personalized information.</li>
+                    <li>Add new tools, such as a credit card comparison feature.</li>
+                    <li>Introduce useful templates, like a budget tracker.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 6: Thank You Slide -->
+        <div id="slide6" class="slide">
+            <h1 class="text-[#1F2937]">Thank You</h1>
+            <h2 class="text-[#6B7280]">Let's build a future where all Canadians are financially literate.</h2>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="absolute bottom-4 right-4 flex space-x-4">
+            <button id="prevBtn" class="bg-[#F3F4F6] hover:bg-[#E5E7EB] text-[#4B5563] font-bold py-2 px-4 rounded-full transition-colors disabled:bg-[#F9FAFB] disabled:text-[#D1D5DB] disabled:cursor-not-allowed">
+                Previous
+            </button>
+            <button id="nextBtn" class="bg-[#10B981] hover:bg-[#059669] text-white font-bold py-2 px-4 rounded-full transition-colors disabled:bg-[#A7F3D0] disabled:text-[#065F46] disabled:cursor-not-allowed">
+                Next
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            let currentSlideIndex = 0;
+
+            const showSlide = (index) => {
+                slides.forEach((slide, i) => {
+                    slide.classList.remove('active');
+                    if (i === index) {
+                        slide.classList.add('active');
+                    }
+                });
+            };
+
+            const updateButtons = () => {
+                prevBtn.disabled = currentSlideIndex === 0;
+                nextBtn.disabled = currentSlideIndex === slides.length - 1;
+            };
+
+            nextBtn.addEventListener('click', () => {
+                if (currentSlideIndex < slides.length - 1) {
+                    currentSlideIndex++;
+                    showSlide(currentSlideIndex);
+                    updateButtons();
+                }
+            });
+
+            prevBtn.addEventListener('click', () => {
+                if (currentSlideIndex > 0) {
+                    currentSlideIndex--;
+                    showSlide(currentSlideIndex);
+                    updateButtons();
+                }
+            });
+
+            // Initial state
+            showSlide(currentSlideIndex);
+            updateButtons();
+        });
+    </script>
+
+</body>
+</html>
